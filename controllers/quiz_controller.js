@@ -23,7 +23,7 @@ exports.load = function (req, res, next, quizId) {
 
 // GET /quizzes
 exports.index = function (req, res, next) {
-
+    req.session.score= 0;
     var countOptions = {};
 
     // Busquedas:
@@ -185,5 +185,61 @@ exports.check = function (req, res, next) {
         quiz: req.quiz,
         result: result,
         answer: answer
+    });
+};
+//
+//.then(function (quizzes,req,tes,next){
+//for(var i=1; i <=quizzes.length;i++){
+  //req.session.pendientes.push(i);
+//}
+//});
+// GET /quizzes/random_play
+exports.randomplay = function(req, res, next){
+  req.session.score = req.session.score || 0; //Respondidas
+  req.session.pendientes = req.session.pendientes || []; //Array .
+  var quizId;
+  var indice;
+  models.Quiz.findAll()
+  .then(function (quizzes){
+    if(req.session.score ===0 && req.session.pendientes.length===0){
+      for(var i=1;i<=quizzes.length;i++){
+        req.session.pendientes.push(i);
+      }
+    }
+    if(req.session.pendientes.length===0){
+      res.render('quizzes/random_nomore',{score:req.session.score});
+    }
+    if(req.session.pendientes.length===1){
+      quizId=req.session.pendientes[0];
+      req.session.pendientes.splice(0,1);
+    }
+    while(req.session.pendientes.length > 1){
+      quizId = Math.floor(Math.random()*quizzes.length+1);
+      indice = req.session.pendientes.indexOf(quizId);
+      if(indice != -1){
+       req.session.pendientes.splice(indice,1);
+       break;
+     }
+    }
+  models.Quiz.findById(quizId)
+  .then(function (quiz) {
+      if (quiz) {
+          req.quiz = quiz;
+          res.render('quizzes/random_play', {score:req.session.score,quiz:req.quiz});
+        }
+      });
+    });
+};
+
+exports.randomcheck = function(req, res,next){
+  var answer = req.query.answer || "";
+  var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+  if (result === true){
+    req.session.score++;
+ }
+  res.render('quizzes/random_result',{
+      score:req.session.score,
+      result: result,
+      answer: answer
     });
 };
