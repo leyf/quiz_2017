@@ -236,7 +236,9 @@ exports.randomcheck = function(req, res,next){
   var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
   if (result === true){
     req.session.score++;
- }
+ }else{
+	req.session.score=0;
+}
   res.render('quizzes/random_result',{
       score:req.session.score,
       result: result,
