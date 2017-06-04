@@ -50,8 +50,6 @@ exports.index = function (req, res, next) {
 
     var title = "Preguntas";
     req.session.score= 0;
-    var countOptions = {};
-
 
     // Busquedas:
     var search = req.query.search || '';
@@ -270,6 +268,7 @@ exports.randomplay = function(req, res, next){
 };
 
 exports.randomcheck = function(req, res,next){
+  req.session.score = req.session.score || 0; //Respondidas
   var answer = req.query.answer || "";
   var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
   if (result === true){
