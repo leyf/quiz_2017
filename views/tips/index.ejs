@@ -5,11 +5,14 @@
         <% var accepted = tip.accepted; %>
         <% var isAdmin = session.user && session.user.isAdmin; %>
         <% var isQuizAuthor = session.user && quizAuthorId && quizAuthorId === session.user.id; %>
+        <% var isTipAuthor = session.user && tip.AuthorId && tip.AuthorId === session.user.id; %>
 
         <% if (accepted || isAdmin || isQuizAuthor) { %>
 
             <li>
                 <%= tip.text %>
+
+                <small> Tip owner: <span id="autor"><% tip.Author ? tip.Author.username : "Desconocido" %></span></small>
 
                 <% if (!accepted && (isAdmin || isQuizAuthor)) { %>
 
@@ -19,7 +22,7 @@
 
                 <% } %>
 
-                <% if (isAdmin || isQuizAuthor) { %>
+                <% if (isAdmin || isTipAuthor) { %>
 
                       <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
                            <button>Borrar</button>
