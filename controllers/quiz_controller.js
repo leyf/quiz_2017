@@ -275,7 +275,7 @@ exports.randomcheck = function(req, res,next){
   if (result === true){
     req.session.score++;
  }else{
-	req.session.score=0;
+	  req.session.score=0;
 }
   res.render('quizzes/random_result',{
       score:req.session.score,

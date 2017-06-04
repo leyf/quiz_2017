@@ -102,7 +102,7 @@ exports.destroy = function (req, res, next) {
 
 //MW se encarga de comprobar si el Usuario es propietario del quiz para que peudaa realizar acciones sobre el.
 
-exports.whois = function(req, res, next){
+exports.adminOrAuthorRequired = function(req, res, next){
   var isAdmin = req.session.user.isAdmin;
   var isAuthor = req.tip.AuthorId === req.session.user.id;
   if(isAdmin || isAuthor){

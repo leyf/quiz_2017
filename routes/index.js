@@ -131,7 +131,7 @@ router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/accept',
     tipController.accept);
 router.delete('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
     sessionController.loginRequired,
-    tipController.whois,
+    tipController.adminOrAuthorRequired,
     tipController.destroy);
 router.get('/quizzes',                     quizController.index);
 router.get('/quizzes/:quizId(\\d+)',       quizController.show);
@@ -154,4 +154,3 @@ router.get('/help', function(req, res, next) {
 
 
 module.exports = router;
-
